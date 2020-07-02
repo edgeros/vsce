@@ -1,9 +1,11 @@
 {
 	"name": "edgeros",
 	"displayName": "edgeros",
-	"description": "",
+	"description": "https://github.com/edgeros/vsce",
 	"enableProposedApi": true,
 	"version": "0.0.1",
+	"publisher": "edgeros",
+	"repository": "",
 	"engines": {
 		"vscode": "^1.44.0"
 	},
