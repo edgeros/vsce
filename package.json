@@ -1,11 +1,11 @@
 {
 	"name": "edgeros",
 	"displayName": "edgeros",
-	"description": "https://github.com/edgeros/vsce",
+	"description": "EdgerOS development extension for VSC.",
 	"enableProposedApi": true,
 	"version": "0.0.1",
 	"publisher": "edgeros",
-	"repository": "",
+	"repository": "https://github.com/edgeros/vsce.git",
 	"engines": {
 		"vscode": "^1.44.0"
 	},
