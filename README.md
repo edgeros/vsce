@@ -12,7 +12,7 @@ Before deploying your app to Edger device, you should add it to your workspace f
 
 By clicking the "Add Edger Device" button or "Add" menu item, enter the ip address of your Edger device, give it a nick name and you are good to go.
 
-![add device](media/add-device.gif)
+![add device](https://www.edgeros.com/img/add-device.gif)
 
 > Tip: Make sure your computer and Edger devices are in the same network.
 
@@ -20,11 +20,11 @@ By clicking the "Add Edger Device" button or "Add" menu item, enter the ip addre
 
 Device information can be edited via context menu on device item in the tree view.
 
-![context menu](media/menu-items.png)
+![context menu](https://www.edgeros.com/img/menu-items.png)
 
 Right click on your device item, then click on the "Edit" menu item. Update the ip address or device nickname as you need.
 
-![edit device](media/edit-device.gif)
+![edit device](https://www.edgeros.com/img/edit-device.gif)
 
 ### Delete Device
 
@@ -36,7 +36,7 @@ Once your app is ready to be deployed on your Edger device. You can select the t
 
 Before deployment, device password will be asked and verified during deployment. The content of your app's desc.json will be validated as well.
 
-![deploy app](media/deploy.gif)
+![deploy app](https://www.edgeros.com/img/deploy.gif)
 
 ### Device Console
 
@@ -48,11 +48,7 @@ Device Console can be open via Edger device context menu item "Console". Console
 
 N/A
 
-## Release Notes
-
-### 0.0.2
-
-Fix wrong version info.
+## [Release Notes](./CHANGELOG.md)
 
 -----------------------------------------------------------------------------------------------------------
 
@@ -62,4 +58,4 @@ Fix wrong version info.
 
 **Enjoy!**
 
-EdgerOS Team, 2020.5
+EdgerOS Team, 2020
