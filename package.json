@@ -6,7 +6,7 @@
 	"version": "0.0.3",
 	"publisher": "edgeros",
 	"repository": "https://github.com/edgeros/vsce.git",
-	"icon": "https://www.edgeros.com/img/icon.png",
+	"icon": "media/icon.png",
 	"engines": {
 		"vscode": "^1.44.0"
 	},
