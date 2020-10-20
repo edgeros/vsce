@@ -30,6 +30,11 @@ Right click on your device item, then click on the "Edit" menu item. Update the 
 
 The "Delete" context menu can be used to delete device from your device list.
 
+### Archive App
+
+With the "Archive" menu item in EdgerOS tree view, you can archive your app, then deploy it to your devices manually or upload the app to our App World.
+![archive app](https://www.edgeros.com/img/archive.png)
+
 ### Deploy App
 
 Once your app is ready to be deployed on your Edger device. You can select the target device and click on the "Deploy" button to deploy your app and test.

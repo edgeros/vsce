@@ -3,7 +3,7 @@
 	"displayName": "edgeros",
 	"description": "EdgerOS development extension for VSC.",
 	"enableProposedApi": false,
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"publisher": "edgeros",
 	"repository": "https://github.com/edgeros/vsce.git",
 	"icon": "media/icon.png",
@@ -23,7 +23,7 @@
 			"explorer": [
 				{
 					"id": "edgerDeviceView",
-					"name": "Edger Devices"
+					"name": "EdgerOS"
 				}
 			]
 		},
@@ -39,6 +39,10 @@
 			{
 				"command": "edgerDevices.addDevice",
 				"title": "Add"
+			},
+			{
+				"command": "edgerDevices.archive",
+				"title": "Archive"
 			},
 			{
 				"command": "edgerDevices.updateDevice",
@@ -71,6 +75,11 @@
 				{
 					"command": "edgerDevices.addDevice",
 					"when": "view == edgerDeviceView"
+				},
+				{
+					"command": "edgerDevices.archive",
+					"when": "view == edgerDeviceView",
+					"group": "navigation"
 				}
 			],
 			"view/item/context": [
@@ -99,7 +108,7 @@
 		"viewsWelcome": [
 			{
 				"view": "edgerDeviceView",
-				"contents": "No edger devices found [learn more](https://www.edgeros.com/).\n[Add Edger Device](command:edgerDevices.addDevice)"
+				"contents": "No EdgerOS device is found [learn more](https://www.edgeros.com/).\n[Add EdgerOS Device](command:edgerDevices.addDevice)"
 			}
 		]
 	},

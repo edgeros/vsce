@@ -127,10 +127,12 @@ export class Edger extends vscode.TreeItem {
         super(deviceName, collapsibleState);
     }
 
+    // @ts-ignore
     get tooltip(): string {
         return `${this.deviceName} - ${this.deviceIP}`;
     }
 
+    // @ts-ignore
     get description(): string {
         return `${this.deviceIP}`;
     }

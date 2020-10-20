@@ -27,6 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const edgerApi = new EdgerApi(context);
 	vscode.commands.registerCommand('edgerDevices.installApp', (edger: Edger) => edgerApi.install(edger));
+	vscode.commands.registerCommand('edgerDevices.archive',() => edgerApi.archive());
 }
 
 export function deactivate() { }

@@ -17,7 +17,7 @@ import * as fs from "fs";
 import axios from "axios";
 
 import { Edger, EdgerDeivceProvider } from './edgerDeviceProvider';
-import { edger_ide_port, eap_desc_json_file_name } from './constants';
+import { edger_ide_port } from './constants';
 import { WorkspaceApi } from './workspaceApi';
 
 export class EdgerApi {
@@ -37,13 +37,6 @@ export class EdgerApi {
 			return;
 		}
 
-		var projectRootFolder = vscode.workspace.workspaceFolders[0].uri.fsPath;
-		// check if app's desc.json is valid
-		await this._workspace.checkDescJson(projectRootFolder).then(undefined, (err) => {
-			console.log(err);
-			throw new Error(err);
-		});
-
 		// ask for device password
 		let pass_options: vscode.InputBoxOptions = {
 			value: edger ? edger.devicePass : '',
@@ -58,7 +51,45 @@ export class EdgerApi {
 		// save device password
 		this._edgerDeviceProvider.updatePassword(edger, dev_pass);
 
-		// compress files as an EAP archive
+		// archive eap file
+		var eap_file: string = await this.archive();
+		if (!eap_file || eap_file === ''){
+			console.log('Archiving eap file failed.');
+			return;
+		}
+
+		// upload eap to edger device
+		await this.uploadEap(eap_file, edger_ip, dev_pass).then(() => {
+			vscode.window.showInformationMessage('Upload eap completed.');
+		}).catch((err) => {
+			vscode.window.showErrorMessage(`Upload eap failed - ${err.message}`);
+		});
+
+		// install/update eap on edger device
+		var eap_name = eap_file.split("/").pop();
+		if (!eap_name){
+			console.log('Can not get eap file name');
+			return;
+		}
+		await this.installEap(edger_ip, dev_pass, eap_name).then(() => {
+			vscode.window.showInformationMessage('Install eap completed.');
+		}).catch((err) => {
+			vscode.window.showErrorMessage(`Install eap failed - ${err.message}`);
+		});
+	}
+
+	async archive(): Promise<string> {
+		if (!vscode.workspace.workspaceFolders) {
+			throw new Error("Can't open workspace.");
+		}
+
+		var projectRootFolder = vscode.workspace.workspaceFolders[0].uri.fsPath;
+		// check if app's desc.json is valid
+		await this._workspace.checkDescJson(projectRootFolder).then(undefined, (err) => {
+			console.log(err);
+			throw new Error(err);
+		});
+
 		let eap_name = vscode.workspace.name + '.eap';
 		var admZip = new AdmZip();
 		var eap_file_path = '';
@@ -70,23 +101,12 @@ export class EdgerApi {
 			}
 			admZip.addLocalFolder(projectRootFolder);
 			admZip.writeZip(eap_file_path);
-			console.log('making eap succeeded.');
+			vscode.window.showInformationMessage(`Archiving eap succeeded: ${eap_name}`);
 		} catch (error) {
-			console.log(`making eap failed: ${error}`);
+			vscode.window.showErrorMessage(`Archiving eap failed - ${error.message}`);
+			throw new Error(error);
 		}
-
-		// upload eap to edger device
-		await this.uploadEap(eap_file_path, edger_ip, dev_pass).then(() => {
-			vscode.window.showInformationMessage('Upload completed.');
-		}).catch((err) => {
-			vscode.window.showErrorMessage(`Upload failed - ${err.message}`);
-		});
-		// install/update eap on edger device
-		await this.installEap(edger_ip, dev_pass, eap_name).then(() => {
-			vscode.window.showInformationMessage('Installation completed.');
-		}).catch((err) => {
-			vscode.window.showErrorMessage(`Installation failed - ${err.message}`);
-		});
+		return eap_file_path;
 	}
 
 	private async uploadEap(eap_path: string, edger_ip: string, dev_pass: string) {
