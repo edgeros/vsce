@@ -22,6 +22,7 @@ import { edger_console_port } from './constants';
 export class EdgerDeivceProvider implements vscode.TreeDataProvider<Edger> {
     _context: ExtensionContext;
     _workspace: WorkspaceApi;
+
     constructor(context: ExtensionContext) {
         this._context = context;
         this._workspace = new WorkspaceApi(context);
@@ -100,19 +101,40 @@ export class EdgerDeivceProvider implements vscode.TreeDataProvider<Edger> {
         const channel = vscode.window.createOutputChannel('Edger Console');
         channel.show();
 
-        const client = net.createConnection({ port: edger_console_port, host: edger.deviceIP }, () => {
-            // 'connect' listener.
-            console.log('connected to server!');
+        this.connect(edger, channel);
+    }
+
+    private connect(edger: Edger, channel: vscode.OutputChannel) {
+        let socket = net.createConnection({ port: edger_console_port, host: edger.deviceIP }, () => {
+            console.log('Connected to server!');
         });
-        client.on('data', (data: { toString: () => any; }) => {
+
+        socket.on('data', (data: { toString: () => any; }) => {
             let str: string = data.toString().trim();
-            console.log(str);
+            console.log("Received data: " + str);
             channel.appendLine(str);
-            // client.end();
         });
-        client.on('end', () => {
-            console.log('disconnected from server');
+        socket.on('timeout', () => {
+            console.log('Server connection timeed out');
+            this.reconnect(socket, edger, channel);
         });
+        socket.on('close', () => {
+            console.log('Server connection closed');
+            this.reconnect(socket, edger, channel);
+        });
+        socket.on('end', () => {
+            console.log('Server connection ended');
+            this.reconnect(socket, edger, channel);
+        });
+    }
+
+    reconnect(socket: net.Socket, edger: Edger, channel: vscode.OutputChannel): void {
+        console.log('Server connection lost, reconnecting ...');
+        socket.removeAllListeners();
+        socket.end();
+        setTimeout(() => {
+            this.connect(edger, channel);
+        }, 3000);
     }
 }
 
